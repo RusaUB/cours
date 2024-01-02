@@ -1,6 +1,6 @@
 import math
 
-electron = True
+electron = False
 
 rayon_terrestre = 6378
 mu = 398600

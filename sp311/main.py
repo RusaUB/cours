@@ -139,7 +139,7 @@ for index, v in enumerate(v_angles):
     result_la = calculate_la(v)
     La.append(round(result_la,2))
 
-print('la =>',la )
+print('la =>',La )
 
 L0 = [ ]
 
