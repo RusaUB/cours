@@ -19,7 +19,7 @@ formatted_Gr = "{:.2e}".format(Gr)
 print("Nombre de Grashoff (Gr) : ", formatted_Gr)
 
 Ra = Pr*Gr
-print(f'Nombre de Rayleigh (Ra) : {Ra:.2e}')
+print('Nombre de Rayleigh (Ra) : {:.2e}'.format(Ra))
 
 Nu = (0.825 + (0.387*Ra**(1/6))/(1+(0.492/Pr)**(9/16))**(8/27))**2
 print("Nombre de Nusselt (Nu) : ",round(Nu,3))

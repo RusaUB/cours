@@ -1,12 +1,12 @@
 """
 
-Une conduite cylindrique d’une centrale énergétique en acier de conductivité 𝝀a de rayon interne ri et de rayon externe re de longueur L canalise de la vapeur surchauffée. 
+Une conduite cylindrique d une centrale énergétique en acier de conductivité 𝝀a de rayon interne ri et de rayon externe re de longueur L canalise de la vapeur surchauffée. 
 
-On appellera hi le coefficient de convection interne et Si la surface d’échange correspondante. 
+On appellera hi le coefficient de convection interne et Si la surface d échange correspondante. 
 
-On isole cette conduite au moyen d’un isolant de forme cylindrique de conductivité 𝝀i d’épaisseur e. 
+On isole cette conduite au moyen d un isolant de forme cylindrique de conductivité i d épaisseur e. 
 
-On appellera he le coefficient de convection externe et Se la surface d’échange correspondante.  
+On appellera he le coefficient de convection externe et Se la surface d échange correspondante.  
 
 """
 
@@ -20,12 +20,12 @@ re = float(input("Re (en m) : "))
 # Creating a list of different insulation thickness values (e) in millimeters
 e_values_mm = [i for i in range(5)]
 
-hi = float(input("Coefficient de convection interne (hi en W/(m^2°C)) : "))
+hi = float(input("hi : "))
 Si = 2 * math.pi * L * ri
 
-he = float(input("Coefficient de convection externe (he en W/(m^2°C)) : "))
-conductivity_steel = float(input("Conductivité thermique de l'acier (en W/(m°C)) : "))
-conductivity_isolation = float(input("Conductivité thermique de l'isolant (en W/(m°C)) : "))
+he = float(input("he : "))
+conductivity_steel = float(input("Cond.therm acier : "))
+conductivity_isolation = float(input("Cond.therm isolant : "))
 
 
 resistance_internal_convection = []
