@@ -13,9 +13,9 @@ On appellera he le coefficient de convection externe et Se la surface d’échan
 import math
 
 # Get input values from the user
-L = float(input("Longueur de la conduite (en m) : "))
-ri = float(input("Rayon interne de la conduite (en m) : "))
-re = float(input("Rayon externe de la conduite (en m) : "))
+L = float(input("L (en m) : "))
+ri = float(input("Ri (en m) : "))
+re = float(input("Re (en m) : "))
 
 # Creating a list of different insulation thickness values (e) in millimeters
 e_values_mm = [i for i in range(5)]
