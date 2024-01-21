@@ -1,15 +1,15 @@
-T_a = 20
-T_s = 10
+T_a = float(input("Température de l'air (T_a) en °C : "))
+T_s = float(input("Température de la surface (T_s) en °C : "))
+viscosite = float(input("Viscosité (en m^2/s) : "))
+masse_vol = float(input("Masse volumique (en kg/m^3) : "))
+conductivite = float(input("Conductivité thermique (en W/(m°C)) : "))
+capacite_calorifique = float(input("Capacité calorifique (en J/(kg°C)) : "))
+hauteur_de_mur = float(input("Hauteur du mur (en m) (grand L) : "))
+longeur_du_mur = float(input("Longueur du mur (en m) : "))
 
-viscosite = 18.044e-6
-masse_vol = 1.185
-conductivite = 0.02475 
-capacite_calorifique = 1.011e3
-coefficient_de_dilatation = 3.4720e-3 #(1/T_m)
+coefficient_de_dilatation = 1/(273+(T_a+T_s))
 
-hauteur_de_mur = 4 # (L) utilisé dans toutes les formule
-
-longeur_du_mur = 5
+print('\n')
 
 Pr = (viscosite*capacite_calorifique)/conductivite
 print("Nombre de Prandtl (Pr) : ",round(Pr,3))

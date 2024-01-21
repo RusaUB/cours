@@ -12,18 +12,20 @@ On appellera he le coefficient de convection externe et Se la surface d’échan
 
 import math
 
-L = 1
-ri = 6e-3  # (m)
-re = 7e-3  # (m)
+# Get input values from the user
+L = float(input("Longueur de la conduite (en m) : "))
+ri = float(input("Rayon interne de la conduite (en m) : "))
+re = float(input("Rayon externe de la conduite (en m) : "))
 
+# Creating a list of different insulation thickness values (e) in millimeters
 e_values_mm = [i for i in range(5)]
 
-hi = 200  # (W/m^2 C°)
+hi = float(input("Coefficient de convection interne (hi en W/(m^2°C)) : "))
 Si = 2 * math.pi * L * ri
 
-he = 10
-conductivity_steel = 15  # (W/m C°)
-conductivity_isolation = 0.1
+he = float(input("Coefficient de convection externe (he en W/(m^2°C)) : "))
+conductivity_steel = float(input("Conductivité thermique de l'acier (en W/(m°C)) : "))
+conductivity_isolation = float(input("Conductivité thermique de l'isolant (en W/(m°C)) : "))
 
 
 resistance_internal_convection = []
@@ -56,7 +58,7 @@ for e_mm in e_values_mm:
 
 print("\nResults:")
 print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format(
-    "Epaisseur e", "Rconv_in (°C/W)", "Rconv_ex (°C/W)", "Rcond_ac (°C/W)", "Rcond_is (°C/W)", "Rtotale (°C/W)"
+    "Epaisseur e (mm)", "Rconv_in (°C/W)", "Rconv_ex (°C/W)", "Rcond_ac (°C/W)", "Rcond_is (°C/W)", "Rtotale (°C/W)"
 ))
 
 for i, e_value_mm in enumerate(e_values_mm):
