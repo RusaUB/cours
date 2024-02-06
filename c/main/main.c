@@ -1,13 +1,12 @@
 #include <stdio.h>
-#include <stdbool.h>
+
+
 
 int main()
 {
-    // pass
-    float a,b;
-    a = 2.2f;
-    b = 3.3f;
-    float max_ab = a>b ? a : b;
-    printf("%.1f",max_ab); 
+    char str[] = {'H', 'e', 'l', 'l', 'o', '\0'};
+    char s[] = "Hello"; 
+    char b[] = "Hel"  "lo";
+    printf("%s", str);
     return 0;
 }
