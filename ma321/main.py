@@ -38,14 +38,13 @@ def golden_section_search(f, a, b, tol=1e-10):
         d = a + (b - a) / golden_ratio
         evolution.append((b + a) / 2)  # stocker le point minimum actuel
         intervals.append((a, b))  # stocker l'intervalle actuel
-    print(iteration, "itérations")  # afficher le nombre d'itérations
-    return (b + a) / 2, evolution, intervals
+    return (b + a) / 2, evolution, intervals, iteration
 
 # Calculer la recherche par section dorée pour chaque point minimum
-minimum_golden, _, intervals_golden = golden_section_search(F, -10, 10)
+section_dooree, _, intervals_golden, iteration = golden_section_search(F, -10, 10)
 
 # Définir les itérations spécifiques pour le tracé
-specific_iterations = [1, 10, 20, 30, 48]  # Spécifier les itérations spécifiques
+specific_iterations = [1, 10, 20, 30, iteration]  # Spécifier les itérations spécifiques
 
 # Tracer la fonction originale F(x) avec l'évolution de l'intervalle [a, b] pour des itérations spécifiques
 x_values = np.linspace(-10, 10, 1000)
@@ -61,7 +60,7 @@ for i, interval in enumerate(intervals_golden):
         ax1.plot(interval, [F(interval[0]), F(interval[1])], 'o-', label=f'Itération {i+1}')
 ax1.set_xlabel('x')
 ax1.set_ylabel('F(x)')
-ax1.set_title(f'Recherche par la section dorée autour du minimum ({minimum_golden:.2f})')
+ax1.set_title(f'Recherche par la section dorée autour du minimum ({section_dooree:.2f})')
 ax1.legend()
 ax1.grid(True)
 
@@ -73,10 +72,10 @@ for i, interval in enumerate(intervals_golden):
         ax2.plot(interval, [F(interval[0]), F(interval[1])], 'o-', label=f'Itération {i+1}')
 ax2.set_xlabel('x')
 ax2.set_ylabel('F(x)')
-ax2.set_title(f'Zoom près du minimum ({minimum_golden:.2f}) à 1e-1')
+ax2.set_title(f'Zoom près du minimum ({section_dooree:.2f}) à 1e-1')
 ax2.legend()
 ax2.grid(True)
-ax2.set_xlim(minimum_golden - 0.1, minimum_golden + 0.1)  # Zoom près du minimum
+ax2.set_xlim(section_dooree - 0.1, section_dooree + 0.1)  # Zoom près du minimum
 
 # Troisième sous-graphique: Vue encore plus zoomée autour du minimum de la méthode de la section dorée
 ax3 = axes[1,0]
@@ -86,10 +85,10 @@ for i, interval in enumerate(intervals_golden):
         ax3.plot(interval, [F(interval[0]), F(interval[1])], 'o-', label=f'Itération {i+1}')
 ax3.set_xlabel('x')
 ax3.set_ylabel('F(x)')
-ax3.set_title(f'Zoom encore plus près du minimum ({minimum_golden:.2f}) à 1e-3')
+ax3.set_title(f'Zoom encore plus près du minimum ({section_dooree:.2f}) à 1e-3')
 ax3.legend()
 ax3.grid(True)
-ax3.set_xlim(minimum_golden - 1e-3, minimum_golden + 1e-3)  # Zoom encore plus près du minimum
+ax3.set_xlim(section_dooree - 1e-3, section_dooree + 1e-3)  # Zoom encore plus près du minimum
 
 # Quatrième sous-graphique: Vue extrêmement zoomée autour du minimum de la méthode de la section dorée
 ax4 = axes[1,1]
@@ -99,10 +98,52 @@ for i, interval in enumerate(intervals_golden):
         ax4.plot(interval, [F(interval[0]), F(interval[1])], 'o-', label=f'Itération {i+1}')
 ax4.set_xlabel('x')
 ax4.set_ylabel('F(x)')
-ax4.set_title(f'Zoom extrêmement près du minimum ({minimum_golden:.2f}) à 1e-8')
+ax4.set_title(f'Zoom extrêmement près du minimum ({section_dooree:.2f}) à 1e-8')
 ax4.legend()
 ax4.grid(True)
-ax4.set_xlim(minimum_golden - 1e-8, minimum_golden + 1e-8)  # Zoom extrêmement près du minimum
+ax4.set_xlim(section_dooree - 1e-8, section_dooree + 1e-8)  # Zoom extrêmement près du minimum
 
 plt.tight_layout()
 plt.show()
+
+def F(x): 
+    return x**4 + 8*x**3 + 24*x**2 + 32*x + 17 
+def G(x): 
+    return np.sqrt((-2-x)**2+2) 
+
+def H(x): 
+    return np.exp(x)-x 
+
+def dF(x): 
+    return 4*x**3 + 24*x**2 + 48*x + 32 
+def dG(x): 
+    return (x + 2)/np.sqrt((-x - 2)**2 + 2) 
+
+def dH(x): 
+    return np.exp(x) - 1 
+def d2F(x): 
+    return 12*(x**2 + 4*x + 4) 
+def d2G(x): 
+    return (-(x + 2)**2/((x + 2)**2 + 2) + 1)/np.sqrt((x + 2)**2 + 2) 
+
+def d2H(x): 
+    return np.exp(x) 
+
+def method_newton(dF,d2F): 
+    x = -3 
+    while abs(dF(x)) > 1e-6: 
+        x -= dF(x) / d2F(x) 
+    return x 
+
+print(method_newton(dF=dF,d2F=d2F))
+
+def secante(dF):
+    x = 0
+    x_n = 0
+    while abs(x_n - x) > 1e-6:
+        x = x_n
+        x_n = x - dF(x) / d2F(x)
+    return method_newton(dF=dF,d2F=d2F)
+
+print(secante(dF))
+
