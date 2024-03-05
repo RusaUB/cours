@@ -31,3 +31,24 @@ if __name__ == '__main__':
         print(f"Minimum per le méthode de quasi-Newton pour la function {f_name}(x): {x_quiasi}")
         #plot_newton_method(functions[0][f_name], df, d2f, x0_values[f_name]) #pour tracer l'evolution de minimum par la methode de newton
     print("\n")
+
+
+    #--------------Question 4---------------
+    print("---------------Question 4---------------\n")
+    for f_name, (df, d2f) in zip(['F', 'G', 'H'], zip(functions[1].values(), functions[2].values())):
+        x_dekker = dekker(df,a,b)
+        print(f"Le point minimum de la fonction {f_name}(x) par la methode de Dekker : {x_dekker}")
+    print("\n")
+
+    #--------------Question 5---------------
+    # print("---------------Question 5---------------\n")
+    # data_points_F = [(-40,  F(-40) ), (50,  F(50)), (15,  F(15))]
+    # data_points_G = [(-40,  G(-40) ), (50,  G(50)), (15,  G(15))]
+    # data_points_H = [(-40,  H(-40) ), (50,  H(50)), (15,  H(15))]
+
+    # data_points = [data_points_F, data_points_G, data_points_H]
+
+    # for vals,fonc in zip(data_points, [F,G,H]):
+    #     interp_func = quadratic_interpolation(vals)
+    #     plot_functions(f=fonc,data_points=vals, interp_func=interp_func)
+    # print("\n")

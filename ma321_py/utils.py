@@ -3,6 +3,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from scipy.optimize import fsolve
+from fonctions import (
+    F,G,H
+)
 
 def df_from_minimize_methods(functions: list, export_excel: bool = False) -> None:
 
@@ -220,6 +224,7 @@ def method_newton(dF: callable, d2F: callable, x0: float, epsilon=1e-6, max_iter
         print("La méthode de Newton n'a pas convergé.")
     return x, iter_count, cpu_time
 
+
 def plot_newton_method(F: callable,dF: callable,d2F: callable, x0: float) -> None:
     """
     Fonction pour tracer la fonction et le point minimum par la méthode de la section doree
@@ -285,3 +290,81 @@ def compare_newton_with_quasi_newton(functions: dict, derivatives: dict, second_
     if export_excel:
         df.to_excel('compare_newton_with_quasi_newton.xlsx')
     print(df)
+
+
+def dekker(f, a0, b0, tol=1e-6, max_iter=100):
+    ak = a0
+    bk = b0
+    bk_minus_1 = a0
+    
+    for i in range(max_iter):
+        # Calcul de la sécante
+        s = bk - (bk - bk_minus_1) / (f(bk) - f(bk_minus_1)) * f(bk)
+        
+        # Calcul du milieu
+        m = (ak + bk) / 2
+        
+        # Choix du prochain itéré
+        if abs(s - bk) < abs(m - bk) and s > min(bk, m) and s < max(bk, m):
+            bk_plus_1 = s
+        else:
+            bk_plus_1 = m
+        
+        # Choix du nouveau contrepoint
+        if f(ak) * f(bk_plus_1) < 0:
+            ak_plus_1 = ak
+        else:
+            ak_plus_1 = bk
+        
+        # Échange si nécessaire
+        if abs(f(ak_plus_1)) < abs(f(bk_plus_1)):
+            ak_plus_1, bk_plus_1 = bk_plus_1, ak_plus_1
+        
+        # Condition de convergence
+        if abs(f(ak_plus_1)) < tol:
+            return ak_plus_1
+        
+        # Mise à jour des itérations
+        bk_minus_1 = bk
+        ak = ak_plus_1
+        bk = bk_plus_1
+    
+    raise ValueError("La méthode de Dekker n'a pas convergé après {} itérations".format(max_iter))
+
+def quadratic_interpolation(points):
+    n = len(points)
+    if n != 3:
+        raise ValueError("Quadratic interpolation requires exactly 3 data points")
+
+    A = np.array([[point**2, point, 1] for point, _ in points])
+    b = np.array([y for _, y in points])
+
+    u = np.linalg.solve(A, b)
+
+    def f(t):
+        return u[0]*t**2 + u[1]*t + u[2]
+
+    return f
+
+def find_roots(interp_func, initial_guess=0):
+    root = fsolve(interp_func, initial_guess)
+    return root
+
+def plot_functions(f,data_points, interp_func):
+    x_values = np.linspace(-40, 50, 1000)
+    y_original_values = [f(x) for x in x_values]
+    y_interp_values = [interp_func(x) for x in x_values]
+
+    plt.plot(x_values, y_original_values, label='Original Function')
+    plt.plot(x_values, y_interp_values, label='Interpolation')
+
+    roots = find_roots(interp_func, initial_guess=-0.1)
+    print("Roots of Interpolation:", roots)
+    plt.plot(roots, np.zeros_like(roots), 'ro', label='Roots of Interpolation')
+
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.title('Quadratic Interpolation vs. Original Function')
+    plt.grid(True)
+    plt.legend()
+    plt.show()
