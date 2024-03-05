@@ -47,7 +47,16 @@ def df_from_minimize_methods(functions: list, export_excel: bool = False) -> Non
         print("DataFrame exporté vers 'methodes_optimisation_scipy.xlsx' avec succès!")
 
 
-def golden_section_search(f, a, b, tol=1e-10):
+def golden_section_search(f: callable, a: float, b : float, tol=1e-10) -> tuple:
+    """
+    Fonction pour trouver le point minimum d'une fonction par la méthode de la section doree
+
+    Args:
+        f (callable): fonction a minimiser
+        a (float): borne inf
+        b (float): borne sup
+        tol (float, optional): tolerance. Defaults to 1e-10.
+    """
     evolution = []  # stocker l'évolution du point minimum
     intervals = []  # stocker l'évolution de l'intervalle [a, b]
     iteration = 0
@@ -69,7 +78,16 @@ def golden_section_search(f, a, b, tol=1e-10):
     cpu_time = end_time - start_time  # Calculer le temps CPU
     return (b + a) / 2, evolution, intervals, iteration, cpu_time
 
-def create_excel_golden_section_search(functions, a, b, tol=1e-10):
+def create_excel_golden_section_search(functions: dict, a: float, b: float, tol=1e-10) -> None:
+    """
+    Fonction pour creer un fichier Excel avec les resultats de la recherche par la méthode de la section doree
+
+    Args:
+        functions (dict): dictionnaire des fonctions a minimiser
+        a (float): borne inf
+        b (float): borne sup
+        tol (float, optional): tolerance. Defaults to 1e-10.
+    """
     results = {}
     for name, f in functions.items():
         result, _, _, iteration, cpu_time = golden_section_search(f, a, b, tol)
@@ -78,7 +96,15 @@ def create_excel_golden_section_search(functions, a, b, tol=1e-10):
     df.to_excel('golden_section_search_results.xlsx')
     print("Le fichier Excel des résultats a été créé avec succès.")
 
-def visualize_golden_section_search(f, a, b):
+def visualize_golden_section_search(f: callable, a: float, b:float) -> None:
+    """
+    Fonction pour visualiser l'evolution de l'intervalle [a, b] par la méthode de la section doree
+
+    Args:
+        f (callable): fonction a minimiser
+        a (float): borne inf
+        b (float): borne sup
+    """
     # Calculer la recherche par section dorée pour chaque point minimum
     section_dooree, evolution, intervals_golden, iteration, cpu_time= golden_section_search(f, a, b)
 
@@ -148,7 +174,16 @@ def visualize_golden_section_search(f, a, b):
     plt.tight_layout()
     plt.show()
 
-def method_newton(dF, d2F, x0, epsilon=1e-6, max_iter=100):
+def method_newton(dF: callable, d2F: callable, x0: float, epsilon=1e-6, max_iter=100):
+    """
+    Fonction pour trouver le point minimum d'une fonction par la méthode de la section doree
+
+    Args:
+        f (callable): fonction a minimiser
+        a (float): borne inf
+        b (float): borne sup
+        tol (float, optional): tolerance. Defaults to 1e-10.
+    """
     x = x0
     iter_count = 0
     while abs(dF(x)) > epsilon and iter_count < max_iter:
@@ -159,7 +194,20 @@ def method_newton(dF, d2F, x0, epsilon=1e-6, max_iter=100):
     print("Itteration Newton", iter_count)
     return x
 
-def method_newton(dF, d2F, x0, epsilon=1e-6, max_iter=100):
+def method_newton(dF: callable, d2F: callable, x0: float, epsilon=1e-6, max_iter=100) -> tuple:
+    """
+    Fonction pour trouver le point minimum d'une fonction par la méthode de Newton.
+
+    Args:
+        dF (callable): Dérivée première de la fonction.
+        d2F (callable): Dérivée seconde de la fonction.
+        x0 (float): Point initial.
+        epsilon (float, optional): Tolérance pour la convergence. Defaults to 1e-6.
+        max_iter (int, optional): Nombre maximum d'itérations. Defaults to 100.
+
+    Returns:
+        tuple: Un tuple contenant le point minimum trouvé, le nombre d'itérations effectuées et le temps CPU utilisé.
+    """
     start_time = time.time()
     x = x0
     iter_count = 0
@@ -172,7 +220,15 @@ def method_newton(dF, d2F, x0, epsilon=1e-6, max_iter=100):
         print("La méthode de Newton n'a pas convergé.")
     return x, iter_count, cpu_time
 
-def plot_newton_method(F,dF,d2F, x0):
+def plot_newton_method(F: callable,dF: callable,d2F: callable, x0: float) -> None:
+    """
+    Fonction pour tracer la fonction et le point minimum par la méthode de la section doree
+    Args :
+        F (callable): fonction a minimiser
+        dF (callable): derivee de la fonction
+        d2F (callable): derivee seconde de la fonction
+        x0 (float): point initial
+    """
     # Perform Newton's method
     x_k, _, _ = method_newton(dF, d2F, x0)
 
@@ -193,7 +249,16 @@ def plot_newton_method(F,dF,d2F, x0):
     plt.grid(True)
     plt.show()
 
-def method_quasi_newton(dF, x0, epsilon=1e-6, max_iter=100):
+def method_quasi_newton(dF: callable, x0: float, epsilon=1e-6, max_iter=100) -> tuple:
+    """
+    Fonction pour trouver le point minimum d'une fonction par la méthode de la section doree
+
+    Args:
+        f (callable): fonction a minimiser
+        a (float): borne inf
+        b (float): borne sup
+        tol (float, optional): tolerance. Defaults to 1e-10.
+    """
     start_time = time.time()
     x = x0
     x_prev = x0 - epsilon 
@@ -209,7 +274,7 @@ def method_quasi_newton(dF, x0, epsilon=1e-6, max_iter=100):
         print("La méthode quasi-Newton n'a pas convergé.")
     return x, iter_count, cpu_time  # Returning both the result, the iteration count, and the CPU time
 
-def compare_newton_with_quasi_newton(functions, derivatives, second_derivatives, x0_values, epsilon=1e-6, max_iter=100, export_excel=False):
+def compare_newton_with_quasi_newton(functions: dict, derivatives: dict, second_derivatives, x0_values, epsilon=1e-6, max_iter=100, export_excel=False):
     results = {}
     for name in functions:
         x_newton, iter_newton, cpu_time_newton = method_newton(derivatives[name], second_derivatives[name], x0_values[name], epsilon, max_iter)
@@ -220,39 +285,3 @@ def compare_newton_with_quasi_newton(functions, derivatives, second_derivatives,
     if export_excel:
         df.to_excel('compare_newton_with_quasi_newton.xlsx')
     print(df)
-
-def dekker(f, a0, b0, tol=1e-6, max_iter=100):
-    ak = a0
-    bk = b0
-    bk_prev = a0
-
-    # Vérifier si les conditions initiales sont valides
-    if f(a0) * f(b0) >= 0:
-        raise ValueError("Les conditions initiales ne satisfont pas f(a0) * f(b0) < 0")
-
-    for i in range(max_iter):
-        # Calcul de la sécante
-        s = bk - ((bk - bk_prev) / (f(bk) - f(bk_prev))) * f(bk)
-
-        # Calcul du point milieu
-        m = (ak + bk) / 2
-
-        # Choix du prochain itéré
-        if s > ak and s < m:
-            bk_prev = bk
-            bk = s
-        else:
-            bk_prev = bk
-            bk = m
-
-        # Mise à jour du contrepoint
-        if f(ak) * f(bk) < 0:
-            ak = ak
-        else:
-            ak = bk
-
-        # Vérifier la convergence
-        if abs(f(ak)) < tol:
-            return ak
-
-    raise ValueError("La méthode de Dekker n'a pas convergé après {} itérations".format(max_iter))
